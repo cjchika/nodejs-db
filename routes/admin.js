@@ -1,12 +1,14 @@
-const express = require("express");
+import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
 router.get("/add-product", (req, res, next) => {
-  res.send(
-    "<form action='/admin/add-product' method='POST'><input type='number' name='price' /><button type='submit'>Add Price</button></form>"
-  );
-  console.log("In the middleware!");
+  res.sendFile(path.join(__dirname, "../", "views", "addProduct.html"));
 });
 
 router.post("/add-product", (req, res, next) => {
@@ -14,4 +16,4 @@ router.post("/add-product", (req, res, next) => {
   res.redirect("/");
 });
 
-module.exports = router;
+export default router;
