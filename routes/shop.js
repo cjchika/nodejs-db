@@ -10,7 +10,8 @@ import { products } from "./admin.js";
 const router = express.Router();
 
 router.get("/", (req, res, next) => {
-  res.render("shop");
+  const productData = products;
+  res.render("shop", { prods: productData, docTitle: "Shop" });
 });
 
 export default router;
