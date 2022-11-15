@@ -15,6 +15,7 @@ import adminRoutes from "./routes/admin.js";
 import shopRoutes from "./routes/shop.js";
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
