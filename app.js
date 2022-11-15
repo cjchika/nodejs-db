@@ -9,15 +9,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+app.set("view engine", "pug");
+app.set("views", "views");
+
 dotenv.config();
 
-import adminRoutes from "./routes/admin.js";
+import adminData from "./routes/admin.js";
 import shopRoutes from "./routes/shop.js";
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/admin", adminRoutes);
+app.use("/admin", adminData);
 app.use(shopRoutes);
 
 app.use((req, res, next) => {
