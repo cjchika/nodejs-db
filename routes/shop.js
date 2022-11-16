@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get("/", (req, res, next) => {
   const productData = products;
-  res.render("shop", { prods: productData, docTitle: "Shop" });
+  res.render("shop", { prods: productData, pageTitle: "Shop" });
 });
 
 export default router;

@@ -9,7 +9,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-app.set("view engine", "pug");
+
+app.set("view engine", "ejs");
 app.set("views", "views");
 
 dotenv.config();
@@ -24,7 +25,7 @@ app.use("/admin", adminData);
 app.use(shopRoutes);
 
 app.use((req, res, next) => {
-  res.status(404).render("404Page");
+  res.status(404).render("404Page", { pageTitle: "Page Not Found" });
 });
 
 const PORT = process.env.PORT || 3000;
