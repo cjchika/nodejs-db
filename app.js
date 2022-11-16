@@ -24,7 +24,7 @@ app.use("/admin", adminData);
 app.use(shopRoutes);
 
 app.use((req, res, next) => {
-  res.status(404).sendFile(path.join(__dirname, "views", "404Page.html"));
+  res.status(404).render("404Page");
 });
 
 const PORT = process.env.PORT || 3000;
