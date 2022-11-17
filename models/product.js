@@ -5,18 +5,24 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const prod = path.join("data", "products.json");
+
+const getProductFromFile = (cb) => {
+  fs.readFile(prod, (err, fileContent) => {
+    if (err) {
+      return cb([]);
+    }
+    cb(JSON.parse(fileContent));
+  });
+};
+
 export class Product {
   constructor(title) {
     this.title = title;
   }
 
   save() {
-    const prod = path.join(__dirname, "data", "products.json");
-    fs.readFile(prod, (err, fileContent) => {
-      let products = [];
-      if (!err) {
-        products = JSON.parse(fileContent);
-      }
+    getProductFromFile((products) => {
       products.push(this);
       fs.writeFile(prod, JSON.stringify(products), (err) => {
         console.log(err);
@@ -24,7 +30,7 @@ export class Product {
     });
   }
 
-  static fetchAll() {
-    return products;
+  static fetchAll(cb) {
+    getProductFromFile(cb);
   }
 }
