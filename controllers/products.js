@@ -1,7 +1,7 @@
 import { Product } from "../models/product.js";
 
 export const getAddProduct = (req, res, next) => {
-  res.render("add-product", { pageTitle: "Add Product" });
+  res.render("admin/add-product", { pageTitle: "Add Product" });
 };
 
 export const postAddProduct = (req, res, next) => {
@@ -12,6 +12,6 @@ export const postAddProduct = (req, res, next) => {
 
 export const getProducts = (req, res, next) => {
   const products = Product.fetchAll((products) => {
-    res.render("shop", { prods: products, pageTitle: "Shop" });
+    res.render("shop/product-list", { prods: products, pageTitle: "Shop" });
   });
 };
