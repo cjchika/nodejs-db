@@ -15,18 +15,17 @@ app.set("views", "views");
 
 dotenv.config();
 
-import adminData from "./routes/admin.js";
+import adminRoutes from "./routes/admin.js";
 import shopRoutes from "./routes/shop.js";
+import { get404Page } from "./controllers/error.js";
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/admin", adminData);
+app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 
-app.use((req, res, next) => {
-  res.status(404).render("404Page", { pageTitle: "Page Not Found" });
-});
+app.use(get404Page);
 
 const PORT = process.env.PORT || 3000;
 

@@ -1,21 +1,15 @@
 import express from "express";
-import path from "path";
-import { fileURLToPath } from "url";
+// import path from "path";
+// import { fileURLToPath } from "url";
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { getAddProduct, postAddProduct } from "../controllers/products.js";
 
 const router = express.Router();
 
-export const products = [];
+router.get("/add-product", getAddProduct);
 
-router.get("/add-product", (req, res, next) => {
-  res.render("add-product", { pageTitle: "Add Product" });
-});
-
-router.post("/add-product", (req, res, next) => {
-  products.push({ title: req.body.title });
-  res.redirect("/");
-});
+router.post("/add-product", postAddProduct);
 
 export default router;
