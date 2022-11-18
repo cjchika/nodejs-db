@@ -5,10 +5,21 @@ import express from "express";
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
 
-import { getProducts } from "../controllers/products.js";
+import {
+  getProducts,
+  getIndex,
+  getCart,
+  getCheckout,
+} from "../controllers/shop.js";
 
 const router = express.Router();
 
-router.get("/", getProducts);
+router.get("/", getIndex);
+
+router.get("/products", getProducts);
+
+router.get("/cart", getCart);
+
+router.get("/checkout", getCheckout);
 
 export default router;

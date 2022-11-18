@@ -4,11 +4,17 @@ import express from "express";
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
 
-import { getAddProduct, postAddProduct } from "../controllers/products.js";
+import {
+  getAddProduct,
+  postAddProduct,
+  getProducts,
+} from "../controllers/admin.js";
 
 const router = express.Router();
 
 router.get("/add-product", getAddProduct);
+
+router.get("/products", getProducts);
 
 router.post("/add-product", postAddProduct);
 
