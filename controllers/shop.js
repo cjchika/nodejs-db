@@ -19,3 +19,7 @@ export const getCart = (req, res, next) => {
 export const getCheckout = (req, res, next) => {
   res.render("shop/checkout", { pageTitle: "Checkout" });
 };
+
+export const getOrders = (req, res, next) => {
+  res.render("shop/orders", { pageTitle: "Orders" });
+};
