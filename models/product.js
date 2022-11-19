@@ -5,6 +5,8 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+import { Cart } from "./cart.js";
+
 const prod = path.join("data", "products.json");
 
 const getProductFromFile = (cb) => {
@@ -48,6 +50,18 @@ export class Product {
 
   static fetchAll(cb) {
     getProductFromFile(cb);
+  }
+
+  static deleteById(id) {
+    getProductFromFile((products) => {
+      const product = products.find((prod) => prod.id === id);
+      const updatedProducts = products.filter((p) => prod.id !== id);
+      fs.writeFile(prod, JSON.stringify(updatedProducts), (err) => {
+        if (!err) {
+          Cart.deleteProduct(id, product.price);
+        }
+      });
+    });
   }
 
   static findById(id, cb) {
