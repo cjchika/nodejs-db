@@ -2,6 +2,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 
+import db from "./utils/database.js";
+
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -18,6 +20,8 @@ dotenv.config();
 import adminRoutes from "./routes/admin.js";
 import shopRoutes from "./routes/shop.js";
 import { get404Page } from "./controllers/error.js";
+
+db.execute("SELECT * FROM products");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
