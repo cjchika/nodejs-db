@@ -13,12 +13,16 @@ export const getProducts = (req, res, next) => {
 
 export const getProduct = (req, res, next) => {
   const prodId = req.params.productId;
-  Product.findById(prodId, (product) => {
-    res.render("shop/product-details", {
-      product: product,
-      pageTitle: product.title,
+  Product.findById(prodId)
+    .then(([product]) => {
+      res.render("shop/product-details", {
+        product: product[0],
+        pageTitle: product.title,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  });
 };
 
 export const getIndex = (req, res, next) => {
