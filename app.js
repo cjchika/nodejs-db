@@ -37,7 +37,6 @@ User.hasMany(Product);
 sequelize
   .sync({ force: true })
   .then((result) => {
-    // console.log(result);
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => console.log(`Server runnning on port: ${PORT}`));
   })

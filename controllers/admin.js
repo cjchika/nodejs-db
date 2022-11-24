@@ -20,7 +20,6 @@ export const postAddProduct = (req, res, next) => {
     description: description,
   })
     .then((result) => {
-      // console.log(result);
       console.log("Created Product Successfully");
       res.redirect("/admin/products");
     })
