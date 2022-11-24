@@ -2,9 +2,9 @@ import { Product } from "../models/product.js";
 import { Cart } from "../models/cart.js";
 
 export const getProducts = (req, res, next) => {
-  Product.fetchAll()
-    .then(([rows, fieldData]) => {
-      res.render("shop/product-list", { prods: rows, pageTitle: "Shop" });
+  Product.findAll()
+    .then((products) => {
+      res.render("shop/product-list", { prods: products, pageTitle: "Shop" });
     })
     .catch((err) => {
       console.log(err);
@@ -26,11 +26,13 @@ export const getProduct = (req, res, next) => {
 };
 
 export const getIndex = (req, res, next) => {
-  Product.fetchAll()
-    .then(([rows, fieldData]) => {
-      res.render("shop/index", { prods: rows, pageTitle: "Shop" });
+  Product.findAll()
+    .then((products) => {
+      res.render("shop/index", { prods: products, pageTitle: "Shop" });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 export const getCart = (req, res, next) => {
