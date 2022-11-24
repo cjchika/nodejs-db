@@ -3,6 +3,8 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 
 import sequelize from "./utils/database.js";
+import { Product } from "./models/product.js";
+import { User } from "./models/user.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -29,8 +31,11 @@ app.use(shopRoutes);
 
 app.use(get404Page);
 
+Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+User.hasMany(Product);
+
 sequelize
-  .sync()
+  .sync({ force: true })
   .then((result) => {
     // console.log(result);
     const PORT = process.env.PORT || 5000;
