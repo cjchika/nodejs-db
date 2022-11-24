@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 
-import db from "./utils/database.js";
+import sequelize from "./utils/database.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -21,14 +21,6 @@ import adminRoutes from "./routes/admin.js";
 import shopRoutes from "./routes/shop.js";
 import { get404Page } from "./controllers/error.js";
 
-db.execute("SELECT * FROM products")
-  .then((result) => {
-    console.log(result);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -37,6 +29,13 @@ app.use(shopRoutes);
 
 app.use(get404Page);
 
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => console.log(`Server runnning on port: ${PORT}`));
+sequelize
+  .sync()
+  .then((result) => {
+    // console.log(result);
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => console.log(`Server runnning on port: ${PORT}`));
+  })
+  .catch((err) => {
+    console.log(err);
+  });

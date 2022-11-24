@@ -2,7 +2,7 @@ import { Sequelize } from "sequelize";
 
 import sequelize from "../utils/database.js";
 
-const Product = sequelize.define("product", {
+export const Product = sequelize.define("product", {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -11,19 +11,15 @@ const Product = sequelize.define("product", {
   },
   title: Sequelize.STRING,
   price: {
-    type: {
-      type: Sequelize.DOUBLE,
-      allowNull: false,
-    },
-    imageUrl: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    description: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
+    type: Sequelize.DOUBLE,
+    allowNull: false,
+  },
+  imageUrl: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: Sequelize.STRING,
+    allowNull: false,
   },
 });
-
-export default Product;
