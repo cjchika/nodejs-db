@@ -26,6 +26,15 @@ import { get404Page } from "./controllers/error.js";
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use((req, res, next) => {
+  User.findByPk(1)
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => console.log(err));
+});
+
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 
@@ -35,8 +44,19 @@ Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 User.hasMany(Product);
 
 sequelize
-  .sync({ force: true })
+  // .sync({ force: true })
+  .sync()
   .then((result) => {
+    return User.findByPk(1);
+  })
+  .then((user) => {
+    if (!user) {
+      User.create({ name: "Chika", email: "test@test.com" });
+    }
+    return user;
+  })
+  .then((user) => {
+    console.log(user);
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => console.log(`Server runnning on port: ${PORT}`));
   })
