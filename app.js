@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 import sequelize from "./utils/database.js";
 import { Product } from "./models/product.js";
 import { User } from "./models/user.js";
+import { Cart } from "./models/cart.js";
+import { CartItem } from "./models/cart-item.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -42,6 +44,10 @@ app.use(get404Page);
 
 Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 User.hasMany(Product);
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
 
 sequelize
   // .sync({ force: true })
