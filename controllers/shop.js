@@ -1,5 +1,4 @@
 import { Product } from "../models/product.js";
-import { Cart } from "../models/cart.js";
 
 export const getProducts = (req, res, next) => {
   Product.findAll()
@@ -111,6 +110,31 @@ export const postCartDeleteProduct = (req, res, next) => {
 
 export const getCheckout = (req, res, next) => {
   res.render("shop/checkout", { pageTitle: "Checkout" });
+};
+
+export const postOrder = (req, res, next) => {
+  req.user
+    .getCart()
+    .then((cart) => {
+      cart.getProducts();
+    })
+    .then((products) => {
+      return req.user
+        .createOrder()
+        .then((order) => {
+          return order.addProducts(
+            products.map((product) => {
+              product.orderItem = { quantity: product.cartItem };
+              return product;
+            })
+          );
+        })
+        .then((result) => {
+          res.redirect("/orders");
+        })
+        .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
 };
 
 export const getOrders = (req, res, next) => {
