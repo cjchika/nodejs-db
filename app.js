@@ -62,7 +62,10 @@ sequelize
     return user;
   })
   .then((user) => {
-    console.log(user);
+    user.createCart();
+  })
+  .then((cart) => {
+    console.log(cart);
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => console.log(`Server runnning on port: ${PORT}`));
   })
