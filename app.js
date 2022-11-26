@@ -17,7 +17,7 @@ app.set("views", "views");
 
 dotenv.config();
 
-// import adminRoutes from "./routes/admin.js";
+import adminRoutes from "./routes/admin.js";
 // import shopRoutes from "./routes/shop.js";
 // import { get404Page } from "./controllers/error.js";
 
@@ -33,14 +33,13 @@ app.use(express.static(path.join(__dirname, "public")));
 //     .catch((err) => console.log(err));
 // });
 
-// app.use("/admin", adminRoutes);
+app.use("/admin", adminRoutes);
 // app.use(shopRoutes);
 
 // app.use(get404Page);
 
 const PORT = process.env.PORT || 5000;
 
-mongoConnect((client) => {
-  console.log(client);
+mongoConnect(() => {
   app.listen(PORT, () => console.log(`Server runnning on port: ${PORT}`));
 });

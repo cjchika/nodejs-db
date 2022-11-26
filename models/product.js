@@ -1,6 +1,16 @@
-import { Sequelize } from "sequelize";
+import { mongoConnect } from "../utils/database";
+import { getDb } from "../utils/database";
 
-import sequelize from "../utils/database.js";
+export class Product {
+  constructor(title, price, description, imageUrl) {
+    this.title = title;
+    this.price = price;
+    this.description = description;
+    this.imageUrl = imageUrl;
+  }
+
+  save() {}
+}
 
 export const Product = sequelize.define("product", {
   id: {
