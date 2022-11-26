@@ -8,7 +8,6 @@ export const mongoConnect = (callback) => {
     "mongodb+srv://mern_gee:chiefchief100@cluster0.l7yrx98.mongodb.net/?retryWrites=true&w=majority"
   )
     .then((client) => {
-      console.log("Bingo!");
       _db = client.db();
       callback();
     })
