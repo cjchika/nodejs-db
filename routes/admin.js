@@ -5,7 +5,7 @@ import {
   postAddProduct,
   getProducts,
   getEditProduct,
-  // postEditProduct,
+  postEditProduct,
   // postDeleteProduct,
 } from "../controllers/admin.js";
 
@@ -19,7 +19,7 @@ router.post("/add-product", postAddProduct);
 
 router.get("/edit-product/:productId", getEditProduct);
 
-// router.post("/edit-product", postEditProduct);
+router.post("/edit-product", postEditProduct);
 
 // router.post("/delete-product", postDeleteProduct);
 
