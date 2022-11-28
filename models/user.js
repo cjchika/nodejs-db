@@ -1,14 +1,24 @@
-import { Sequelize } from "sequelize";
+import mongodb from "mongodb";
+import { getDb } from "../utils/database.js";
 
-import sequelize from "../utils/database.js";
+const ObjectId = mongodb.ObjectId;
 
-export const User = sequelize.define("user", {
-  id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    allowNull: false,
-    primaryKey: true,
-  },
-  name: Sequelize.STRING,
-  email: Sequelize.STRING,
-});
+export class User {
+  constructor(username, email) {
+    this.name = username;
+    this.email = email;
+  }
+
+  save() {
+    const db = getDb();
+    return db.collection("users").insertOne(this);
+  }
+
+  static findById(userId) {
+    const db = getDb();
+    return db
+      .collection("users")
+      .find({ _id: new ObjectId(userId) })
+      .next();
+  }
+}
