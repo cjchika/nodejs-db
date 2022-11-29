@@ -1,9 +1,4 @@
 import express from "express";
-// import path from "path";
-// import { fileURLToPath } from "url";
-
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
 
 import {
   getProducts,
@@ -29,7 +24,7 @@ router.get("/cart", getCart);
 
 router.post("/cart", postCart);
 
-// router.post("/cart-delete-item", postCartDeleteProduct);
+router.post("/cart-delete-item", postCartDeleteProduct);
 
 // router.get("/orders", getOrders);
 

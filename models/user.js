@@ -52,6 +52,11 @@ export class User {
 
   getCart() {
     const db = getDb();
+    //if no cart exists yet, return an empty array
+    if (!this.cart.items) {
+      return Promise.resolve([]);
+    }
+
     const productIds = this.cart.items.map((i) => {
       return i.productId;
     });
@@ -69,6 +74,19 @@ export class User {
           };
         });
       });
+  }
+
+  deleteItemFromCart(productId) {
+    const updatedCartItems = this.cart.items.filter((item) => {
+      return item.productId != productId.toString();
+    });
+    const db = getDb();
+    return db
+      .collection("users")
+      .updateOne(
+        { _id: new ObjectId(this._id) },
+        { $set: { cart: { items: updatedCartItems } } }
+      );
   }
 
   static findById(userId) {
