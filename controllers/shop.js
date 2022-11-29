@@ -81,25 +81,9 @@ export const getCheckout = (req, res, next) => {
 
 export const postOrder = (req, res, next) => {
   req.user
-    .getCart()
-    .then((cart) => {
-      cart.getProducts();
-    })
-    .then((products) => {
-      return req.user
-        .createOrder()
-        .then((order) => {
-          return order.addProducts(
-            products.map((product) => {
-              product.orderItem = { quantity: product.cartItem };
-              return product;
-            })
-          );
-        })
-        .then((result) => {
-          res.redirect("/orders");
-        })
-        .catch((err) => console.log(err));
+    .addOrder()
+    .then((result) => {
+      res.redirect("/orders");
     })
     .catch((err) => console.log(err));
 };

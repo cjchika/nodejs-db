@@ -30,6 +30,6 @@ router.post("/cart-delete-item", postCartDeleteProduct);
 
 // router.get("/checkout", getCheckout);
 
-// router.get("/create-order", postOrder);
+router.get("/create-order", postOrder);
 
 export default router;
