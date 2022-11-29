@@ -37,16 +37,11 @@ export const getIndex = (req, res, next) => {
 export const getCart = (req, res, next) => {
   req.user
     .getCart()
-    .then((cart) => {
-      return cart
-        .getProducts()
-        .then((products) => {
-          res.render("shop/cart", {
-            pageTitle: "Your Cart",
-            products: products,
-          });
-        })
-        .catch((err) => console.log(err));
+    .then((products) => {
+      res.render("shop/cart", {
+        pageTitle: "Your Cart",
+        products: products,
+      });
     })
     .catch((err) => {
       console.log(err);
