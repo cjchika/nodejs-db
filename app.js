@@ -2,7 +2,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 
-import { mongoConnect } from "./utils/database.js";
+import mongoose from "mongoose";
+
 import { User } from "./models/user.js";
 
 import path from "path";
@@ -41,6 +42,6 @@ app.use(get404Page);
 
 const PORT = process.env.PORT || 5000;
 
-mongoConnect(() => {
+mongoose.connect(() => {
   app.listen(PORT, () => console.log(`Server runnning on port: ${PORT}`));
 });

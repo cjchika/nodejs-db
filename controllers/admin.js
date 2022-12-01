@@ -1,4 +1,3 @@
-import mongodb from "mongodb";
 import { Product } from "../models/product.js";
 
 export const getAddProduct = (req, res, next) => {
@@ -13,14 +12,12 @@ export const postAddProduct = (req, res, next) => {
   const price = req.body.price;
   const imageUrl = req.body.imageUrl;
   const description = req.body.description;
-  const product = new Product(
-    title,
-    price,
-    description,
-    imageUrl,
-    null,
-    req.user._id
-  );
+  const product = new Product({
+    title: title,
+    price: price,
+    description: description,
+    imageUrl: imageUrl,
+  });
   product
     .save()
     .then((result) => {
