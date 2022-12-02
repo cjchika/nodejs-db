@@ -1,7 +1,7 @@
 import { Product } from "../models/product.js";
 
 export const getProducts = (req, res, next) => {
-  Product.fetchAll()
+  Product.find()
     .then((products) => {
       res.render("shop/product-list", { prods: products, pageTitle: "Shop" });
     })
@@ -25,7 +25,7 @@ export const getProduct = (req, res, next) => {
 };
 
 export const getIndex = (req, res, next) => {
-  Product.fetchAll()
+  Product.find()
     .then((products) => {
       res.render("shop/index", { prods: products, pageTitle: "Shop" });
     })

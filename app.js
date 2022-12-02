@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 import mongoose from "mongoose";
 
-import { User } from "./models/user.js";
+// import { User } from "./models/user.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -26,14 +26,14 @@ import { get404Page } from "./controllers/error.js";
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use((req, res, next) => {
-  User.findById("6370c34bd5bd7edbe1e70512")
-    .then((user) => {
-      req.user = new User(user.name, user.email, user.cart, user._id);
-      next();
-    })
-    .catch((err) => console.log(err));
-});
+// app.use((req, res, next) => {
+//   User.findById("6370c34bd5bd7edbe1e70512")
+//     .then((user) => {
+//       req.user = new User(user.name, user.email, user.cart, user._id);
+//       next();
+//     })
+//     .catch((err) => console.log(err));
+// });
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
@@ -42,6 +42,11 @@ app.use(get404Page);
 
 const PORT = process.env.PORT || 5000;
 
-mongoose.connect(() => {
-  app.listen(PORT, () => console.log(`Server runnning on port: ${PORT}`));
-});
+mongoose
+  .connect(process.env.CONNECTION_URL)
+  .then(() =>
+    app.listen(PORT, () => console.log(`Server runnning on port: ${PORT}`))
+  )
+  .catch((error) => {
+    console.log(error);
+  });
