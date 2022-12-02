@@ -1,4 +1,5 @@
 import { Product } from "../models/product.js";
+import { Order } from "../models/order.js";
 
 export const getProducts = (req, res, next) => {
   Product.find()
@@ -39,7 +40,7 @@ export const getCart = async (req, res, next) => {
     .populate("cart.items.productId")
     .then((user) => {
       const products = user.cart.items;
-      console.log(products);
+      // console.log(products);
       res.render("shop/cart", {
         pageTitle: "Your Cart",
         products: products,
@@ -82,15 +83,37 @@ export const getCheckout = (req, res, next) => {
   res.render("shop/checkout", { pageTitle: "Checkout" });
 };
 
-export const postOrder = (req, res, next) => {
+export const postOrder = async (req, res, next) => {
   req.user
-    .addOrder()
+    .populate("cart.items.productId")
+    .then((user) => {
+      console.log(user.cart.items);
+      const products = user.cart.items.map((prod) => {
+        return { quantity: prod.quantity, product: prod.productId };
+      });
+      const order = new Order({
+        products: products,
+        user: {
+          name: req.user.name,
+          userId: req.user,
+        },
+      });
+
+      return order.save();
+    })
     .then((result) => {
+      req.user.clearCart();
+    })
+    .then(() => {
       res.redirect("/orders");
     })
     .catch((err) => console.log(err));
 };
 
 export const getOrders = (req, res, next) => {
-  res.render("shop/orders", { pageTitle: "Orders" });
+  Order.find({ "user.userId": req.user._id })
+    .then((orders) => {
+      res.render("shop/orders", { pageTitle: "Orders", orders: orders });
+    })
+    .catch((err) => console.log(err));
 };
