@@ -34,10 +34,12 @@ export const getIndex = (req, res, next) => {
     });
 };
 
-export const getCart = (req, res, next) => {
-  req.user
-    .getCart()
-    .then((products) => {
+export const getCart = async (req, res, next) => {
+  await req.user
+    .populate("cart.items.productId")
+    .then((user) => {
+      const products = user.cart.items;
+      console.log(products);
       res.render("shop/cart", {
         pageTitle: "Your Cart",
         products: products,
@@ -52,6 +54,7 @@ export const postCart = (req, res, next) => {
   const prodId = req.body.productId;
   Product.findById(prodId)
     .then((product) => {
+      console.log(product);
       return req.user.addToCart(product);
     })
     .then((result) => {
@@ -66,7 +69,7 @@ export const postCart = (req, res, next) => {
 export const postCartDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
   req.user
-    .deleteItemFromCart(prodId)
+    .removeFromCart(prodId)
     .then((result) => {
       res.redirect("/cart");
     })
