@@ -7,7 +7,7 @@ export const getProducts = (req, res, next) => {
       res.render("shop/product-list", {
         prods: products,
         pageTitle: "Shop",
-        isAuthenticated: req.isLoggedIn,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -22,7 +22,7 @@ export const getProduct = (req, res, next) => {
       res.render("shop/product-details", {
         product: product,
         pageTitle: product.title,
-        isAuthenticated: req.isLoggedIn,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -36,7 +36,7 @@ export const getIndex = (req, res, next) => {
       res.render("shop/index", {
         prods: products,
         pageTitle: "Shop",
-        isAuthenticated: req.isLoggedIn,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -44,16 +44,16 @@ export const getIndex = (req, res, next) => {
     });
 };
 
-export const getCart = async (req, res, next) => {
-  await req.user
-    .populate("cart.items.productId")
+export const getCart = (req, res, next) => {
+  req.user
+    .populate("cart.items")
     .then((user) => {
       const products = user.cart.items;
       // console.log(products);
       res.render("shop/cart", {
         pageTitle: "Your Cart",
         products: products,
-        isAuthenticated: req.isLoggedIn,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -121,13 +121,14 @@ export const postOrder = async (req, res, next) => {
 };
 
 export const getOrders = (req, res, next) => {
-  Order.find({ "user.userId": req.user._id })
-    .then((orders) => {
-      res.render("shop/orders", {
-        pageTitle: "Orders",
-        orders: orders,
-        isAuthenticated: req.isLoggedIn,
-      });
-    })
-    .catch((err) => console.log(err));
+  res.redirect("/");
+  // Order.find({ "user.userId": req.user._id })
+  //   .then((orders) => {
+  //     res.render("shop/orders", {
+  //       pageTitle: "Orders",
+  //       orders: orders,
+  //       isAuthenticated: req.session.isLoggedIn,
+  //     });
+  //   })
+  //   .catch((err) => console.log(err));
 };
