@@ -4,7 +4,11 @@ import { Order } from "../models/order.js";
 export const getProducts = (req, res, next) => {
   Product.find()
     .then((products) => {
-      res.render("shop/product-list", { prods: products, pageTitle: "Shop" });
+      res.render("shop/product-list", {
+        prods: products,
+        pageTitle: "Shop",
+        isAuthenticated: req.isLoggedIn,
+      });
     })
     .catch((err) => {
       console.log(err);
@@ -18,6 +22,7 @@ export const getProduct = (req, res, next) => {
       res.render("shop/product-details", {
         product: product,
         pageTitle: product.title,
+        isAuthenticated: req.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -28,7 +33,11 @@ export const getProduct = (req, res, next) => {
 export const getIndex = (req, res, next) => {
   Product.find()
     .then((products) => {
-      res.render("shop/index", { prods: products, pageTitle: "Shop" });
+      res.render("shop/index", {
+        prods: products,
+        pageTitle: "Shop",
+        isAuthenticated: req.isLoggedIn,
+      });
     })
     .catch((err) => {
       console.log(err);
@@ -44,6 +53,7 @@ export const getCart = async (req, res, next) => {
       res.render("shop/cart", {
         pageTitle: "Your Cart",
         products: products,
+        isAuthenticated: req.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -113,7 +123,11 @@ export const postOrder = async (req, res, next) => {
 export const getOrders = (req, res, next) => {
   Order.find({ "user.userId": req.user._id })
     .then((orders) => {
-      res.render("shop/orders", { pageTitle: "Orders", orders: orders });
+      res.render("shop/orders", {
+        pageTitle: "Orders",
+        orders: orders,
+        isAuthenticated: req.isLoggedIn,
+      });
     })
     .catch((err) => console.log(err));
 };
