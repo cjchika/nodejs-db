@@ -1,8 +1,11 @@
 import express from "express";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
-
 import mongoose from "mongoose";
+import session from "express-session";
+import { default as connectMongoDBSession } from "connect-mongodb-session";
+
+const MongoDBStore = connectMongoDBSession(session);
 
 import { User } from "./models/user.js";
 
@@ -13,6 +16,19 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+const MONGODB_URI =
+  "mongodb+srv://mern_gee:Lord247@cluster0.l7yrx98.mongodb.net/?retryWrites=true&w=majority";
+
+let store = new MongoDBStore(
+  {
+    uri: MONGODB_URI,
+    collection: "sessions",
+  },
+  (err) => console.log(err)
+);
+
+store.on("error", (error) => console.log(error));
 
 app.set("view engine", "ejs");
 app.set("views", "views");
@@ -26,6 +42,14 @@ import { get404Page } from "./controllers/error.js";
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(
+  session({
+    secret: "the secret",
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+  })
+);
 
 app.use((req, res, next) => {
   User.findById("638978c27c6956e326547f99")
@@ -42,7 +66,7 @@ app.use(authRoutes);
 
 app.use(get404Page);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 
 mongoose
   .connect(process.env.CONNECTION_URL)
