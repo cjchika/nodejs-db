@@ -1,5 +1,7 @@
 import express from "express";
 
+import { isAuth } from "../middleware/isAuth.js";
+
 import {
   getProducts,
   getIndex,
@@ -20,15 +22,15 @@ router.get("/products", getProducts);
 
 router.get("/products/:productId", getProduct);
 
-router.get("/cart", getCart);
+router.get("/cart", isAuth, getCart);
 
-router.post("/cart", postCart);
+router.post("/cart", isAuth, postCart);
 
-router.post("/cart-delete-item", postCartDeleteProduct);
+router.post("/cart-delete-item", isAuth, postCartDeleteProduct);
 
-router.get("/create-order", postOrder);
+router.get("/create-order", isAuth, postOrder);
 
-router.get("/orders", getOrders);
+router.get("/orders", isAuth, getOrders);
 
 // router.get("/checkout", getCheckout);
 
