@@ -7,7 +7,7 @@ import {
   getIndex,
   getCart,
   getCheckout,
-  getOrders,
+  // getOrders,
   getProduct,
   postCart,
   postCartDeleteProduct,
@@ -30,7 +30,7 @@ router.post("/cart-delete-item", isAuth, postCartDeleteProduct);
 
 router.get("/create-order", isAuth, postOrder);
 
-router.get("/orders", isAuth, getOrders);
+// router.get("/orders", isAuth, getOrders);
 
 // router.get("/checkout", getCheckout);
 

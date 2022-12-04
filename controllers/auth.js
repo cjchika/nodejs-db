@@ -2,7 +2,12 @@ import bcrypt from "bcryptjs";
 import { User } from "../models/user.js";
 
 export const getLogin = (req, res, next) => {
-  //   const isLoggedIn = req.get("Cookie").split(";")[3].trim().split("=")[1];
+  // let message = req.flash("error");
+  // if (message.length > 0) {
+  //   message = message[0];
+  // } else {
+  //   message = null;
+  // }
   res.render("auth/login", {
     pageTitle: "Login",
     isAuthenticated: false,
@@ -23,6 +28,7 @@ export const postLogin = (req, res, next) => {
   User.findOne({ email: email })
     .then((user) => {
       if (!user) {
+        req.flash("error", "Invalid Email or Password");
         return res.redirect("/login");
       }
       return bcrypt

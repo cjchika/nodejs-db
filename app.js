@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import session from "express-session";
 import { default as connectMongoDBSession } from "connect-mongodb-session";
 import csurf from "csurf";
+// import flash from "connect-flash";
 
 const MongoDBStore = connectMongoDBSession(session);
 
@@ -55,6 +56,7 @@ app.use(
 );
 
 app.use(csrfProtection);
+// app.use(flash);
 
 app.use((req, res, next) => {
   if (!req.session.user) {

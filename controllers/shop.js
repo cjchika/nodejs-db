@@ -7,6 +7,7 @@ export const getProducts = (req, res, next) => {
       res.render("shop/product-list", {
         prods: products,
         pageTitle: "Shop",
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -21,6 +22,7 @@ export const getProduct = (req, res, next) => {
       res.render("shop/product-details", {
         product: product,
         pageTitle: product.title,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -50,6 +52,7 @@ export const getCart = (req, res, next) => {
       res.render("shop/cart", {
         pageTitle: "Your Cart",
         products: products,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -115,14 +118,15 @@ export const postOrder = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
-export const getOrders = (req, res, next) => {
-  Order.find({ "user.userId": req.user._id })
-    .then((orders) => {
-      res.render("shop/orders", {
-        path: "/orders",
-        pageTitle: "Your Orders",
-        orders: orders,
-      });
-    })
-    .catch((err) => console.log(err));
-};
+// export const getOrders = (req, res, next) => {
+//   Order.find({ "user.userId": req.user._id })
+//     .then((orders) => {
+//       res.render("shop/orders", {
+//         path: "/orders",
+//         pageTitle: "Your Orders",
+//         orders: orders,
+//         isAuthenticated: req.session.isLoggedIn,
+//       });
+//     })
+//     .catch((err) => console.log(err));
+// };
