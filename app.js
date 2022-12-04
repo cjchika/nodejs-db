@@ -74,18 +74,6 @@ const PORT = process.env.PORT || 4000;
 mongoose
   .connect(process.env.CONNECTION_URL)
   .then((res) => {
-    User.findOne().then((user) => {
-      if (!user) {
-        const user = new User({
-          name: "Chika",
-          email: "chika@test.com",
-          cart: {
-            items: [],
-          },
-        });
-        user.save();
-      }
-    });
     app.listen(PORT, () => console.log(`Server runnning on port: ${PORT}`));
   })
   .catch((error) => {
