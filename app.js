@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import session from "express-session";
 import { default as connectMongoDBSession } from "connect-mongodb-session";
+import csurf from "csurf";
 
 const MongoDBStore = connectMongoDBSession(session);
 
@@ -30,6 +31,8 @@ let store = new MongoDBStore(
 
 store.on("error", (error) => console.log(error));
 
+const csrfProtection = csurf();
+
 app.set("view engine", "ejs");
 app.set("views", "views");
 
@@ -51,6 +54,8 @@ app.use(
   })
 );
 
+app.use(csrfProtection);
+
 app.use((req, res, next) => {
   if (!req.session.user) {
     return next();
@@ -61,6 +66,12 @@ app.use((req, res, next) => {
       next();
     })
     .catch((err) => console.log(err));
+});
+
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
 });
 
 app.use("/admin", adminRoutes);

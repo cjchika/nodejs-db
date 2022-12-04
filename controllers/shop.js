@@ -7,7 +7,6 @@ export const getProducts = (req, res, next) => {
       res.render("shop/product-list", {
         prods: products,
         pageTitle: "Shop",
-        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -22,7 +21,6 @@ export const getProduct = (req, res, next) => {
       res.render("shop/product-details", {
         product: product,
         pageTitle: product.title,
-        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -36,7 +34,6 @@ export const getIndex = (req, res, next) => {
       res.render("shop/index", {
         prods: products,
         pageTitle: "Shop",
-        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -53,7 +50,6 @@ export const getCart = (req, res, next) => {
       res.render("shop/cart", {
         pageTitle: "Your Cart",
         products: products,
-        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -93,26 +89,25 @@ export const getCheckout = (req, res, next) => {
   res.render("shop/checkout", { pageTitle: "Checkout" });
 };
 
-export const postOrder = async (req, res, next) => {
+export const postOrder = (req, res, next) => {
   req.user
     .populate("cart.items.productId")
+    .execPopulate()
     .then((user) => {
-      console.log(user.cart.items);
-      const products = user.cart.items.map((prod) => {
-        return { quantity: prod.quantity, product: prod.productId };
+      const products = user.cart.items.map((i) => {
+        return { quantity: i.quantity, product: { ...i.productId._doc } };
       });
       const order = new Order({
-        products: products,
         user: {
-          name: req.user.name,
+          email: req.user.email,
           userId: req.user,
         },
+        products: products,
       });
-
       return order.save();
     })
     .then((result) => {
-      req.user.clearCart();
+      return req.user.clearCart();
     })
     .then(() => {
       res.redirect("/orders");
@@ -121,14 +116,13 @@ export const postOrder = async (req, res, next) => {
 };
 
 export const getOrders = (req, res, next) => {
-  res.redirect("/");
-  // Order.find({ "user.userId": req.user._id })
-  //   .then((orders) => {
-  //     res.render("shop/orders", {
-  //       pageTitle: "Orders",
-  //       orders: orders,
-  //       isAuthenticated: req.session.isLoggedIn,
-  //     });
-  //   })
-  //   .catch((err) => console.log(err));
+  Order.find({ "user.userId": req.user._id })
+    .then((orders) => {
+      res.render("shop/orders", {
+        path: "/orders",
+        pageTitle: "Your Orders",
+        orders: orders,
+      });
+    })
+    .catch((err) => console.log(err));
 };
