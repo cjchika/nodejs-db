@@ -1,5 +1,18 @@
+import crypto from "crypto";
+
 import bcrypt from "bcryptjs";
+// import nodemailer from "nodemailer";
+// import sendgridTransport from "nodemailer-sendgrid-transport";
+
 import { User } from "../models/user.js";
+
+// const transporter = nodemailer.createTransport({
+//   service: "gmail",
+//   auth: {
+//     user: "email@gmail.com",
+//     pass: "******",
+//   },
+// });
 
 export const getLogin = (req, res, next) => {
   // let message = req.flash("error");
@@ -74,6 +87,12 @@ export const postSignup = (req, res, next) => {
         })
         .then((result) => {
           res.redirect("/login");
+          // return transporter.sendMail({
+          //   to: email,
+          //   from: "email@gmail.com",
+          //   subject: "Signup successful.",
+          //   html: "<h1>Congratulations, You successfully signed up!</h1>",
+          // });
         });
     })
     .catch((err) => {
@@ -85,5 +104,42 @@ export const postLogout = (req, res, next) => {
   req.session.destroy((err) => {
     console.log(err);
     res.redirect("/");
+  });
+};
+
+export const getReset = (req, res, next) => {
+  res.render("auth/reset", {
+    pageTitle: "Reset Password",
+  });
+};
+
+export const postReset = (req, res, next) => {
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      console.log(err);
+      return res.redirect("/reset");
+    }
+    const token = buffer.toString("hex");
+    User.findOne({ email: req.body.email })
+      .then((user) => {
+        if (!user) {
+          return res.redirect("/reset");
+        }
+        user.resetToken = token;
+        user.resetTokenExpiration = Date.now() + 3600000;
+        return user.save();
+      })
+      .then((result) => {
+        res.redirect("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+};
+
+export const getNewPassword = (req, res, next) => {
+  res.render("auth/new-password", {
+    pageTitle: "New Password",
   });
 };
