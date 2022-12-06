@@ -21,7 +21,12 @@ router.get("/signup", getSignup);
 
 router.post(
   "/login",
-  [body("email").isEmail().withMessage("Please enter a valid email address")],
+  [
+    body("email")
+      .isEmail()
+      .withMessage("Please enter a valid email address")
+      .normalizeEmail(),
+  ],
   postLogin
 );
 
@@ -30,6 +35,7 @@ router.post(
   check("email")
     .isEmail()
     .withMessage("Please enter a valid email.")
+    .normalizeEmail()
     .custom((value, { req }) => {
       return User.findOne({ email: value }).then((userDoc) => {
         if (userDoc) {
@@ -44,7 +50,8 @@ router.post(
     "Please enter a password with only numbers and text and at least 5 characters"
   )
     .isLength({ min: 5 })
-    .isAlphanumeric(),
+    .isAlphanumeric()
+    .trim(),
   body("confirmedPassword").custom((value, { req }) => {
     if (value !== req.body.password) {
       throw new Error("Passwords have to match!");

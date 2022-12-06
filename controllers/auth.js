@@ -36,6 +36,7 @@ export const getSignup = (req, res, next) => {
       password: "",
       confirmPassword: "",
     },
+    validationResult: [],
   });
 };
 
@@ -96,6 +97,7 @@ export const postSignup = (req, res, next) => {
         password: password,
         confirmPassword: confirmPassword,
       },
+      validationResult: errors.array(),
     });
   }
   bcrypt
