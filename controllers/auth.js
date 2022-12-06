@@ -24,6 +24,7 @@ export const getLogin = (req, res, next) => {
   res.render("auth/login", {
     pageTitle: "Login",
     isAuthenticated: false,
+    errorMessage: null,
   });
 };
 
@@ -31,6 +32,7 @@ export const getSignup = (req, res, next) => {
   res.render("auth/signup", {
     path: "/signup",
     pageTitle: "Signup",
+    errorMessage: null,
     oldInput: {
       email: "",
       password: "",

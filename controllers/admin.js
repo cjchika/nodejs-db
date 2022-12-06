@@ -1,9 +1,12 @@
+import { validationResult } from "express-validator";
 import { Product } from "../models/product.js";
 
 export const getAddProduct = (req, res, next) => {
   res.render("admin/edit-product", {
     pageTitle: "Add Product",
     editing: false,
+    hasError: false,
+    errorMessage: null,
     isAuthenticated: req.session.isLoggedIn,
   });
 };
@@ -13,6 +16,24 @@ export const postAddProduct = (req, res, next) => {
   const price = req.body.price;
   const imageUrl = req.body.imageUrl;
   const description = req.body.description;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    res.status(422).render("admin/edit-product", {
+      pageTitle: "Add Product",
+      editing: false,
+      hasError: true,
+      errorMessage: errors.array()[0].msg,
+      product: {
+        title: title,
+        imageUrl: imageUrl,
+        price: price,
+        description: description,
+      },
+      isAuthenticated: req.session.isLoggedIn,
+    });
+  }
+
   const product = new Product({
     title: title,
     price: price,
@@ -46,6 +67,8 @@ export const getEditProduct = (req, res, next) => {
         pageTitle: "Edit Product",
         editing: editMode,
         product: product,
+        hasError: false,
+        errorMessage: null,
         isAuthenticated: req.session.isLoggedIn,
       });
     })
@@ -85,6 +108,7 @@ export const getProducts = (req, res, next) => {
       res.render("admin/products", {
         prods: products,
         pageTitle: "Admin Products",
+        errorMessage: null,
         isAuthenticated: req.session.isLoggedIn,
       });
     })
