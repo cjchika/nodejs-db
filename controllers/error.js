@@ -4,3 +4,10 @@ export const get404Page = (req, res, next) => {
     isAuthenticated: req.session.isLoggedIn,
   });
 };
+
+export const get500Page = (req, res, next) => {
+  res.status(500).render("500Page", {
+    pageTitle: "Server Error",
+    isAuthenticated: req.session.isLoggedIn,
+  });
+};
